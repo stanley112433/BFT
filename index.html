@@ -1,423 +1,1076 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Download Center</title>
-<style>
-/* Nocturne — design-system tokens and component classes. This file is the source of truth for the system's look; retune it here and see readme.md. */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-:root {
-  --color-bg: #0b0d12;
-  --color-surface: #232532;
-  --color-text: #e9e9ed;
-  --color-accent: #9184d9; /* review round 7 (Barron): the accent moves to
-     the product's blurple — OKLCH hue 289.2, the hue of the app's own Pro
-     accent (#9a8fe0, --om-accent-pro) — at the same lightness the steel
-     accent held (L 0.660, so the documented ratios survive) and chroma
-     in the product blurple's own range (its token sits at C 0.118; the
-     accent takes 0.125, from the old steel's 0.030):
-     the accent now reads as an accent rather than another neutral. */
-  --color-accent-2: #a7a1db; /* the machine-derived stand-in follows: same
-     hue, same L 0.734, chroma at the same 2:3 proportion it held */
-  --color-divider: color-mix(in srgb, #e9e9ed 16%, transparent);
+  <title>BFT Tool – Android Flashing & Mobile Servicing Utility</title>
 
-  /* Tonal ramps — generated in OKLCH on one shared lightness scale, so the
-     same step of any role matches the others in visual value. */
-  --color-neutral-100: #f3f5fe;
-  --color-neutral-200: #e4e7f5;
-  --color-neutral-300: #cfd3e5;
-  --color-neutral-400: #b2b6ca;
-  --color-neutral-500: #9397ab;
-  --color-neutral-600: #75798c;
-  --color-neutral-700: #595d6c;
-  --color-neutral-800: #3f424d;
-  --color-neutral-900: #292b31;
+  <meta name="description" content="BFT Tool is a Windows-based Android servicing utility for firmware maintenance, device diagnostics and supported mobile repair workflows.">
+  <meta name="keywords" content="BFT Tool, Best Flash Tool, BFT Tool Windows, Android Flash Tool, Mobile Servicing Tool, Android Repair Tool">
+  <meta name="robots" content="index, follow">
 
-  --color-accent-100: #f5f4ff;
-  --color-accent-200: #e7e5fe;
-  --color-accent-300: #d2cefd;
-  --color-accent-400: #b5abfc;
-  --color-accent-500: #968ae0;
-  --color-accent-600: #796cbf;
-  --color-accent-700: #5d5294;
-  --color-accent-800: #423a6a;
-  --color-accent-900: #2b2741;
+  <meta property="og:title" content="BFT Tool – Android Servicing Utility">
+  <meta property="og:description" content="Explore BFT Tool features, supported platforms, setup information, FAQs and software details.">
+  <meta property="og:type" content="website">
 
-  --color-accent-2-100: #f5f4ff;
-  --color-accent-2-200: #e7e5fe;
-  --color-accent-2-300: #d2cefd;
-  --color-accent-2-400: #b5afe8;
-  --color-accent-2-500: #9690c9;
-  --color-accent-2-600: #7972a9;
-  --color-accent-2-700: #5c5783;
-  --color-accent-2-800: #423e5d;
-  --color-accent-2-900: #2b293a;
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  /* Deck section-divider ground — review round 3: saturation as presence.
-     Dividers take a saturated deep indigo (hue 277, the neutral ramp's own
-     family; C 0.094 — written when the accent held C 0.030, before the
-     round-7 blurple raised it past the ground's) with a lighter bloom and
-     a ghost tint of the same hue, while the slide grounds stay
-     desaturated. Deck-scale fills only — not interface colors. */
-  --color-section: #262a60;
-  --color-section-glow: #353b80;
-  --color-section-ghost: #4c5397;
+    :root {
+      --bg: #07111f;
+      --bg2: #0b1729;
+      --card: #101f34;
+      --card2: #14263d;
+      --text: #eef6ff;
+      --muted: #9db0c8;
+      --blue: #38bdf8;
+      --cyan: #22d3ee;
+      --green: #34d399;
+      --border: rgba(255,255,255,.08);
+    }
 
-  --font-heading: "Inter", system-ui, sans-serif;
-  --font-heading-weight: 500;
-  --font-body: "Inter", system-ui, sans-serif;
+    html {
+      scroll-behavior: smooth;
+    }
 
-  --space-1: 2.8px;
-  --space-2: 5.6px;
-  --space-3: 8.4px;
-  --space-4: 11.2px;
-  --space-6: 16.8px;
-  --space-8: 22.4px;
+    body {
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(34,211,238,.10), transparent 35%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
 
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 14px;
+    a {
+      text-decoration: none;
+    }
 
-  /* Elevation — derived from the ground: soft ink-tinted shadows on a
-     light theme, a hairline edge + ambient darkness on a dark one. */
-  --shadow-sm: 0 0 0 1px #3f424d;
-  --shadow-md: 0 0 0 1px #595d6c, 0 6px 18px rgba(0,0,0,0.55);
-  --shadow-lg: 0 0 0 1px #9397ab, 0 16px 40px rgba(0,0,0,0.65);
-}
+    .container {
+      width: min(1120px, 92%);
+      margin: auto;
+    }
 
-body {
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-body);
-}
-h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: var(--font-heading-weight); }
+    /* HEADER */
 
-.lighten{mix-blend-mode:lighten;background-color:transparent}
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(7,17,31,.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   Components — built with the tokens above. Plain CSS
-   on plain HTML: no JavaScript, no build step. Each class is documented in
-   readme.md and demonstrated in foundations/ and components/.
-   ══════════════════════════════════════════════════════════════════════ */
+    nav {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+    }
 
-*, *::before, *::after { box-sizing: border-box; }
-body { margin: 0; font-size: 15px; line-height: 1.55; font-weight: 400; }
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
-  line-height: 1.12; letter-spacing: -0.015em; margin: 0 0 var(--space-2);
-}
-h1 { font-size: 42px; }
-h2 { font-size: 32px; }
-h3 { font-size: 25px; }
-h4 { font-size: 20px; }
-h5 { font-size: 16px; }
-h6 { font-size: 13px; }
-h6 { letter-spacing: 0.08em; text-transform: uppercase; }
-p { margin: 0 0 var(--space-3); }
-a { color: var(--color-accent); text-underline-offset: 3px; }
-img { display: block; max-width: 100%; }
-figure { margin: 0; }
-figcaption {
-  font-size: 11px; margin-top: var(--space-1);
-  color: color-mix(in srgb, var(--color-text) 55%, transparent);
-}
-.text-muted { color: color-mix(in srgb, var(--color-text) 55%, transparent); }
-:focus { outline: none; }
-:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
-::selection { background: color-mix(in srgb, var(--color-accent) 30%, transparent); }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: white;
+      font-size: 23px;
+      font-weight: 900;
+      letter-spacing: -.6px;
+    }
 
-/* — rules — */
-/* Rules fade to transparent at both ends instead of stopping cleanly — a
-   Nocturne signature. The ramp is 48px an end (one deck baseline unit),
-   painted from the same divider token. Freestanding rules fade; box
-   outlines, in-control separators, and short accent marks stay solid. */
-.hr {
-  height: 1px; border: 0; margin: var(--space-4) 0;
-  background: linear-gradient(to right,
-    transparent, var(--color-divider) 48px,
-    var(--color-divider) calc(100% - 48px), transparent);
-}
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--cyan), #2563eb);
+      color: #04101c;
+      font-weight: 950;
+      box-shadow: 0 0 25px rgba(34,211,238,.22);
+    }
 
-/* — buttons — */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  cursor: pointer; text-decoration: none;
-  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
-  font-size: 14px; line-height: 1.2; color: var(--color-text); /* matches the .input's 14px —
-     the pair sits side by side in sign-up rows */
-  background: transparent; border: 1px solid transparent;
-  padding: var(--space-2) calc(var(--space-3) * 1.2);
-  border-radius: var(--radius-md);
-}
-.btn svg { display: block; }
-.btn:disabled { opacity: 0.45; cursor: not-allowed; }
-.btn-primary { color: var(--color-accent); border-color: var(--color-accent); }
-.btn-primary:hover { background: color-mix(in srgb, var(--color-accent) 12%, transparent); }
-.btn-primary:active { background: color-mix(in srgb, var(--color-accent) 22%, transparent); }
-.btn-secondary { border-color: var(--color-divider); }
-.btn-secondary:hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
-.btn-secondary:active { background: color-mix(in srgb, var(--color-text) 14%, transparent); }
-.btn-ghost { color: var(--color-accent); padding-inline: var(--space-1); }
-.btn-ghost:hover { background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
-.btn-ghost:active { background: color-mix(in srgb, var(--color-accent) 18%, transparent); }
-.btn-icon { width: 36px; height: 36px; padding: 0; }
-.btn-block { width: 100%; margin-top: var(--space-2); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 23px;
+    }
 
-/* — forms — */
-.field > label {
-  display: block; font-size: 12px; margin-bottom: 5px;
-  color: color-mix(in srgb, var(--color-text) 70%, transparent);
-}
-.input {
-  width: 100%; min-height: 36px; padding: 6px 10px; font: inherit;
-  font-size: 14px; color: var(--color-text); caret-color: var(--color-accent);
-  background: var(--color-surface);
-  border: 1px solid var(--color-divider); border-radius: var(--radius-md);
-}
-.input:hover { border-color: color-mix(in srgb, var(--color-text) 45%, transparent); }
-.input:focus-visible { border-color: var(--color-accent); outline-offset: 0; }
-textarea.input { min-height: 90px; resize: vertical; }
-.radio { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
-.radio input, .seg-opt input {
-  position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
-}
-.radio .dot {
-  width: 16px; height: 16px; flex: none; border-radius: 50%;
-  border: 1.5px solid var(--color-divider);
-}
-.radio:hover .dot { border-color: var(--color-accent); }
-.radio input:checked + .dot {
-  border-color: var(--color-accent); background: var(--color-accent);
-  box-shadow: inset 0 0 0 4px var(--color-bg);
-}
-.radio input:focus-visible + .dot { outline: 2px solid var(--color-accent); outline-offset: 2px; }
-.seg {
-  display: inline-flex; overflow: hidden;
-  border: 1px solid var(--color-divider); border-radius: var(--radius-md);
-}
-.seg-opt {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 7px 12px; font-size: 13px; cursor: pointer;
-}
-.seg-opt + .seg-opt { border-left: 1px solid var(--color-divider); }
-.seg-opt:has(input:checked) { color: var(--color-accent); box-shadow: inset 0 0 0 1px var(--color-accent); }
-.seg-opt:not(:has(input:checked)):hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
-.seg-opt:has(input:focus-visible) { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+    .nav-links a {
+      color: #c9d7e8;
+      font-size: 14px;
+      font-weight: 700;
+    }
 
-/* — cards — */
-.card {
-  display: flex; flex-direction: column; gap: var(--space-2);
-  padding: var(--space-3); border-radius: var(--radius-md); background: var(--color-surface);
-}
-.card-kicker { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent); }
-.card-title {
-  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
-  font-size: 17px; line-height: 1.2;
-}
-.card-body { margin: 0; font-size: 13px; opacity: 0.8; flex: 1; }
-.card-meta {
-  display: flex; align-items: center; gap: 6px; font-size: 11px;
-  color: color-mix(in srgb, var(--color-text) 50%, transparent);
-}
-.elev-sm { box-shadow: var(--shadow-sm); }
-.elev-md { box-shadow: var(--shadow-md); }
-.elev-lg { box-shadow: var(--shadow-lg); }
+    .nav-links a:hover {
+      color: var(--cyan);
+    }
 
-/* — tags — */
-.tag {
-  display: inline-flex; align-items: center; font-size: 11px;
-  letter-spacing: 0.02em; padding: 3px 10px;
-  border-radius: calc(var(--radius-md) * 0.75);
-}
-.tag-accent { background: var(--color-accent-800); color: var(--color-accent-100); }
-.tag-accent-2 { background: var(--color-accent-2-800); color: var(--color-accent-2-100); }
-.tag-neutral { background: var(--color-neutral-800); color: var(--color-neutral-100); }
-.tag-outline { border: 1px solid var(--color-accent); color: var(--color-accent); }
+    /* HERO */
 
-/* — navigation — */
-.nav {
-  display: flex; align-items: center; gap: var(--space-4);
-  padding: var(--space-3) var(--space-4);
-  border-bottom: none;
-}
-.nav-brand {
-  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
-  font-size: 18px; margin-right: auto;
-}
-.nav a { color: inherit; text-decoration: none; font-size: 14px; }
-.nav a:hover, .nav a[aria-current='page'] { color: var(--color-accent); }
+    .hero {
+      padding: 92px 0 75px;
+      text-align: center;
+    }
 
-/* — tables — */
-.table { width: 100%; border-collapse: collapse; font-size: 14px; }
-.table th {
-  text-align: left; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
-  color: color-mix(in srgb, var(--color-text) 60%, transparent);
-  padding: var(--space-2); border-bottom: 1px solid transparent; /* keeps layout; the row paints the fading rule */
-}
-.table td {
-  padding: var(--space-2);
-  border-bottom: 1px solid transparent;
-}
-/* Row rules as row-level strips so the end-fade spans the row, not each cell. */
-.table thead tr {
-  background: linear-gradient(to right,
-    transparent, var(--color-divider) 48px,
-    var(--color-divider) calc(100% - 48px), transparent) no-repeat bottom / 100% 1px;
-}
-.table tbody tr {
-  background: linear-gradient(to right,
-    transparent, color-mix(in srgb, var(--color-text) 8%, transparent) 48px,
-    color-mix(in srgb, var(--color-text) 8%, transparent) calc(100% - 48px), transparent) no-repeat bottom / 100% 1px;
-}
-.table tbody tr:hover {
-  /* the hover tint layers over the row rule, which keeps painting */
-  background:
-    linear-gradient(color-mix(in srgb, var(--color-text) 4%, transparent),
-                    color-mix(in srgb, var(--color-text) 4%, transparent)) no-repeat 0 0 / 100% 100%,
-    linear-gradient(to right,
-      transparent, color-mix(in srgb, var(--color-text) 8%, transparent) 48px,
-      color-mix(in srgb, var(--color-text) 8%, transparent) calc(100% - 48px), transparent) no-repeat bottom / 100% 1px;
-}
+    .eyebrow {
+      display: inline-block;
+      padding: 7px 14px;
+      border: 1px solid rgba(34,211,238,.3);
+      border-radius: 50px;
+      color: var(--cyan);
+      background: rgba(34,211,238,.06);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      margin-bottom: 22px;
+    }
 
-/* — dialog — */
-.dialog-backdrop {
-  position: fixed; inset: 0; display: grid; place-items: center;
-  padding: var(--space-4);
-  background: color-mix(in srgb, var(--color-neutral-900) 50%, transparent);
-}
-.dialog {
-  width: min(440px, 100%); display: flex; flex-direction: column; gap: var(--space-3);
-  padding: var(--space-4); border-radius: var(--radius-lg);
-  background: var(--color-surface); box-shadow: var(--shadow-lg);
-}
-.dialog-title {
-  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
-  font-size: 20px;
-}
-.dialog-body { font-size: 14px; opacity: 0.85; }
-.dialog-actions { display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: var(--space-2); }
+    .hero h1 {
+      font-size: clamp(46px, 8vw, 82px);
+      line-height: 1;
+      letter-spacing: -3px;
+      margin-bottom: 22px;
+    }
 
+    .hero h1 span {
+      background: linear-gradient(90deg, #22d3ee, #60a5fa);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
 
+    .hero p {
+      max-width: 760px;
+      margin: 0 auto 32px;
+      color: var(--muted);
+      font-size: 18px;
+    }
 
-  body { margin: 0; background: var(--color-bg); }
-  a { color: var(--color-accent-300); text-decoration: none; }
-  a:hover { color: var(--color-accent); }
-  .dc-green { color: #4ade80; }
-  .dc-green-bg { background: #22c55e; }
-  @keyframes dc-ring { 0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,.35); } 50% { box-shadow: 0 0 0 14px rgba(74,222,128,0); } }
-  .dc-target { animation: dc-ring 2.4s ease-out infinite; border-color: rgba(74,222,128,.3) !important; }
-  @keyframes dc-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
-  .dc-arrow { animation: dc-bounce 1.8s ease-in-out infinite; }
-  @keyframes dc-dot { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
-  .dc-dot { animation: dc-dot 1.8s ease-in-out infinite; }
-  .dc-download-btn { background: linear-gradient(135deg, #22c55e, #16a34a) !important; transition: transform .15s, filter .15s; }
-  .dc-download-btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
-  .dc-download-btn svg { animation: dc-bounce 1.8s ease-in-out infinite; }
-  .dc-card { border: 1px solid rgba(255,255,255,.08); background: transparent !important; }
-  .dc-particle { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #4ade80; opacity: .6; }
-</style>
+    /* CTA 1 */
+
+    .primary-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 17px 31px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #22d3ee, #2563eb);
+      color: white;
+      font-size: 16px;
+      font-weight: 900;
+      box-shadow: 0 14px 35px rgba(37,99,235,.28);
+      transition: .25s;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 42px rgba(34,211,238,.30);
+    }
+
+    .quick-info {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 13px;
+      margin-top: 35px;
+    }
+
+    .quick-info span {
+      padding: 9px 14px;
+      border-radius: 9px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      color: #c7d5e6;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* GENERAL */
+
+    section {
+      padding: 78px 0;
+    }
+
+    .section-head {
+      max-width: 700px;
+      margin-bottom: 38px;
+    }
+
+    .section-head small {
+      color: var(--cyan);
+      font-weight: 900;
+      letter-spacing: 1.4px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(30px, 5vw, 45px);
+      line-height: 1.15;
+      margin: 8px 0 13px;
+    }
+
+    .section-head p {
+      color: var(--muted);
+    }
+
+    /* SOFTWARE PANEL */
+
+    .software-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      background: linear-gradient(145deg, var(--card), #0c192b);
+      padding: 30px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+    }
+
+    .software-visual {
+      min-height: 310px;
+      border-radius: 18px;
+      background:
+        linear-gradient(rgba(4,12,23,.3), rgba(4,12,23,.8)),
+        radial-gradient(circle at 30% 30%, #164e63, #07111f 60%);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border: 1px solid rgba(34,211,238,.13);
+    }
+
+    .visual-logo {
+      font-size: 64px;
+      font-weight: 950;
+      color: var(--cyan);
+      letter-spacing: -4px;
+    }
+
+    .visual-logo small {
+      display: block;
+      font-size: 13px;
+      letter-spacing: 4px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .specs {
+      display: grid;
+      gap: 10px;
+    }
+
+    .spec {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 15px 16px;
+      background: rgba(255,255,255,.035);
+      border-radius: 11px;
+      border: 1px solid var(--border);
+    }
+
+    .spec span:first-child {
+      color: var(--muted);
+    }
+
+    .spec strong {
+      text-align: right;
+    }
+
+    /* FEATURES */
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .feature {
+      padding: 27px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      transition: .25s;
+    }
+
+    .feature:hover {
+      transform: translateY(-5px);
+      border-color: rgba(34,211,238,.3);
+    }
+
+    .feature-icon {
+      font-size: 30px;
+      margin-bottom: 13px;
+    }
+
+    .feature h3 {
+      margin-bottom: 8px;
+      font-size: 19px;
+    }
+
+    .feature p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* CHIPSETS */
+
+    .chipsets {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .chip {
+      padding: 24px;
+      border-left: 3px solid var(--cyan);
+      background: rgba(255,255,255,.035);
+      border-radius: 4px 15px 15px 4px;
+    }
+
+    .chip h3 {
+      margin-bottom: 7px;
+    }
+
+    .chip p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* DOWNLOAD SECTION */
+
+    .download-box {
+      padding: 55px 30px;
+      border-radius: 28px;
+      text-align: center;
+      background:
+        linear-gradient(135deg, rgba(37,99,235,.18), rgba(34,211,238,.07)),
+        var(--card);
+      border: 1px solid rgba(34,211,238,.18);
+    }
+
+    .download-box h2 {
+      font-size: clamp(31px, 5vw, 48px);
+      margin-bottom: 12px;
+    }
+
+    .download-box p {
+      max-width: 650px;
+      margin: 0 auto 27px;
+      color: var(--muted);
+    }
+
+    /* CTA 2 - DIFFERENT SIZE/COLOR/STYLE */
+
+    .windows-btn {
+      display: inline-block;
+      padding: 13px 25px;
+      background: #0078d4;
+      border: 2px solid #38bdf8;
+      color: white;
+      border-radius: 6px;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .4px;
+      transition: .2s;
+    }
+
+    .windows-btn:hover {
+      background: #0b5fa5;
+      transform: scale(1.035);
+    }
+
+    .safe-note {
+      margin-top: 18px;
+      font-size: 12px;
+      color: #8ea3bc;
+    }
+
+    /* STEPS */
+
+    .steps {
+      display: grid;
+      gap: 13px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      gap: 17px;
+      align-items: start;
+      padding: 18px;
+      background: rgba(255,255,255,.03);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .step-number {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(34,211,238,.1);
+      color: var(--cyan);
+      font-weight: 950;
+    }
+
+    .step p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 3px;
+    }
+
+    /* BRANDS */
+
+    .brands {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+    }
+
+    .brand {
+      padding: 11px 16px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    /* FAQ */
+
+    details {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      margin-bottom: 11px;
+      padding: 18px 20px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 850;
+      color: white;
+    }
+
+    details p {
+      color: var(--muted);
+      padding-top: 12px;
+      font-size: 14px;
+    }
+
+    /* FINAL CTA */
+
+    .final {
+      text-align: center;
+      padding: 90px 0;
+    }
+
+    .final h2 {
+      font-size: clamp(34px, 6vw, 54px);
+      margin-bottom: 13px;
+    }
+
+    .final p {
+      color: var(--muted);
+      margin: 0 auto 27px;
+      max-width: 620px;
+    }
+
+    /* CTA 3 - COMPLETELY DIFFERENT */
+
+    .final-btn {
+      display: inline-block;
+      padding: 11px 22px;
+      border: 1px solid var(--green);
+      border-radius: 50px;
+      color: #d1fae5;
+      background: rgba(52,211,153,.09);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 17px;
+      font-weight: bold;
+      transition: .25s;
+    }
+
+    .final-btn:hover {
+      background: var(--green);
+      color: #032016;
+    }
+
+    /* FOOTER */
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 35px 0;
+      text-align: center;
+      color: #71869e;
+      font-size: 13px;
+    }
+
+    footer strong {
+      color: #b9c9da;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 850px) {
+      .features,
+      .chipsets,
+      .software-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 70px;
+      }
+
+      .hero h1 {
+        letter-spacing: -2px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      section {
+        padding: 58px 0;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .primary-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 16px 15px;
+      }
+
+      .software-panel {
+        padding: 17px;
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "BFT Tool",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Windows",
+    "description": "Windows-based Android servicing and firmware maintenance utility for supported mobile devices."
+  }
+  </script>
+
 </head>
+
 <body>
 
-<div style="min-height:100vh;font-family:var(--font-body);color:var(--color-text);position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;">
-
-  <nav class="nav" style="justify-content:space-between;width:100%;box-sizing:border-box;">
-    <div class="nav-brand">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.8"><path d="M4 12.5V7l8-4 8 4v5.5c0 5-4 7.5-8 9-4-1.5-8-4-8-9Z" stroke-linejoin="round"/><path d="M9 12.5 11.5 15 16 9.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span>Download Center</span>
-    </div>
-    <div class="field" style="margin:0;width:220px;">
-      <input class="input" type="text" placeholder="Search" readonly="">
-    </div>
-  </nav>
-
-  <main style="max-width:600px;margin:0 auto;padding:56px 20px 64px;display:flex;flex-direction:column;gap:0;width:100%;box-sizing:border-box;position:relative;">
-    <div class="dc-particle" style="top:60px;left:90px;"></div>
-    <div class="dc-particle" style="top:8px;right:140px;width:3px;height:3px;"></div>
-    <div class="dc-particle" style="top:220px;right:10px;width:3px;height:3px;"></div>
-
-    <div style="font-size:13px;color:var(--color-neutral-300);display:flex;align-items:center;gap:8px;margin-bottom:16px;">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 4 6v6c0 5 4 8 8 9 4-1 8-4 8-9V6z"/></svg>
-      <a href="#">download</a>
-      <span>/</span>
-      <span>latest</span>
-    </div>
-
-    <div class="card elev-md dc-card" style="align-items:center;text-align:center;gap:0;padding:48px 32px 0;border-radius:12px;">
-      <div class="dc-target" style="width:96px;height:96px;border-radius:50%;border:1px solid var(--color-accent-700);display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
-        <svg class="dc-arrow dc-green" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v11M7 11l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 20h14" stroke-linecap="round"/></svg>
-      </div>
-
-      <span class="dc-green" style="letter-spacing:.1em;text-transform:uppercase;font-size:12px;font-weight:700;margin-bottom:12px;">Latest release</span>
-      <h1 class="card-title" style="font-size:34px;font-weight:700;letter-spacing:-0.01em;margin:8px 0 12px;">Your download is ready</h1>
-      <p class="card-body" style="max-width:420px;font-size:15px;color:var(--color-neutral-300);margin:0 0 32px;">The requested file is ready. Click the button below to continue with the manual download.</p>
-
-      <div style="width:100%;border-top:1px solid rgba(255,255,255,.08);margin-bottom:32px;"></div>
-
-      <a href="#" id="download-btn" class="dc-download-btn" style="max-width:280px;width:100%;margin-bottom:32px;display:flex;align-items:center;justify-content:center;gap:10px;color:#fff;font-weight:700;font-size:16px;letter-spacing:.02em;padding:16px 28px;border-radius:8px;text-decoration:none;">
-        Download Link
+<header>
+  <div class="container">
+    <nav>
+      <a class="logo" href="#">
+        <span class="logo-icon">B</span>
+        BFT Tool
       </a>
 
-      <div style="display:flex;gap:32px;flex-wrap:wrap;justify-content:center;margin-bottom:24px;">
-        <span style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-neutral-200);">
-          <span class="dc-dot dc-green-bg" style="width:6px;height:6px;border-radius:50%;display:inline-block;"></span>Ready
-        </span>
-        <span style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-neutral-200);">
-          <span class="dc-dot dc-green-bg" style="width:6px;height:6px;border-radius:50%;display:inline-block;"></span>Manual download
-        </span>
-        <span style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-neutral-200);">
-          <span class="dc-dot dc-green-bg" style="width:6px;height:6px;border-radius:50%;display:inline-block;"></span>Latest version
-        </span>
+```
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#features">Features</a>
+    <a href="#support">Support</a>
+    <a href="#install">Setup</a>
+    <a href="#faq">FAQ</a>
+    <a href="#get">Get BFT</a>
+  </div>
+</nav>
+```
+
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+
+  <section class="hero">
+    <div class="container">
+
+```
+  <span class="eyebrow">ANDROID SERVICING UTILITY</span>
+
+  <h1>
+    Meet <span>BFT Tool</span>
+  </h1>
+
+  <p>
+    A Windows-based mobile servicing workspace for supported Android
+    devices, bringing firmware maintenance, diagnostics and
+    chipset-based service functions into one interface.
+  </p>
+
+  <!-- DOWNLOAD BUTTON 1 -->
+  <a class="primary-btn"
+     href="https://linktr.ee/Download__Link"
+     target="_blank"
+     rel="noopener noreferrer">
+    ⚡ Download BFT Tool Now
+  </a>
+
+  <div class="quick-info">
+    <span>🪟 Windows</span>
+    <span>📱 Android Servicing</span>
+    <span>🔧 Technician Utility</span>
+    <span>⚙️ Multi-Chipset</span>
+  </div>
+
+</div>
+```
+
+  </section>
+
+  <!-- ABOUT -->
+
+  <section id="about">
+    <div class="container">
+
+```
+  <div class="section-head">
+    <small>ABOUT THE SOFTWARE</small>
+    <h2>One workspace for Android servicing</h2>
+    <p>
+      BFT Tool, also described as Best Flash Tool, is associated with
+      Windows-based Android firmware and servicing workflows. Available
+      operations can vary according to device model, chipset, firmware
+      and software version.
+    </p>
+  </div>
+
+  <div class="software-panel">
+
+    <div class="software-visual">
+      <div class="visual-logo">
+        BFT
+        <small>BEST FLASH TOOL</small>
       </div>
     </div>
 
-    <div style="width:100%;background:var(--color-neutral-900);border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:12px 16px;text-align:left;font-family:monospace;font-size:13px;margin-top:24px;">
-      <span class="dc-green">$</span> <span class="dc-green">download</span> --latest <span style="color:var(--color-neutral-300);">&#10003; ready</span>
+    <div class="specs">
+
+      <div class="spec">
+        <span>Software</span>
+        <strong>BFT Tool</strong>
+      </div>
+
+      <div class="spec">
+        <span>Category</span>
+        <strong>Mobile Servicing</strong>
+      </div>
+
+      <div class="spec">
+        <span>Desktop OS</span>
+        <strong>Windows</strong>
+      </div>
+
+      <div class="spec">
+        <span>Device Type</span>
+        <strong>Supported Android Devices</strong>
+      </div>
+
+      <div class="spec">
+        <span>Connection</span>
+        <strong>USB</strong>
+      </div>
+
+      <div class="spec">
+        <span>Use Case</span>
+        <strong>Repair & Maintenance</strong>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+```
+
+  </section>
+
+  <!-- FEATURES -->
+
+  <section id="features">
+    <div class="container">
+
+```
+  <div class="section-head">
+    <small>CORE CAPABILITIES</small>
+    <h2>Tools technicians commonly need</h2>
+    <p>
+      Functions depend on the connected phone and supported service
+      mode, so always confirm model compatibility before performing
+      maintenance.
+    </p>
+  </div>
+
+  <div class="features">
+
+    <article class="feature">
+      <div class="feature-icon">💾</div>
+      <h3>Firmware Maintenance</h3>
+      <p>
+        Work with compatible firmware packages on supported devices
+        for legitimate software restoration and maintenance.
+      </p>
+    </article>
+
+    <article class="feature">
+      <div class="feature-icon">🔍</div>
+      <h3>Device Information</h3>
+      <p>
+        Identify available device, software, chipset and connection
+        information before beginning a servicing operation.
+      </p>
+    </article>
+
+    <article class="feature">
+      <div class="feature-icon">🔄</div>
+      <h3>Reset Operations</h3>
+      <p>
+        Access supported maintenance and reset functions when servicing
+        devices you own or are authorized to repair.
+      </p>
+    </article>
+
+    <article class="feature">
+      <div class="feature-icon">🧩</div>
+      <h3>Chipset Workflows</h3>
+      <p>
+        Current descriptions associate BFT with MediaTek, Qualcomm
+        and Unisoc/SPD servicing workflows.
+      </p>
+    </article>
+
+    <article class="feature">
+      <div class="feature-icon">📲</div>
+      <h3>ADB & Fastboot</h3>
+      <p>
+        Supported Android maintenance workflows may use common device
+        communication modes such as ADB and Fastboot.
+      </p>
+    </article>
+
+    <article class="feature">
+      <div class="feature-icon">🛠️</div>
+      <h3>Repair Workflow</h3>
+      <p>
+        Designed primarily for mobile technicians handling supported
+        software diagnostics, maintenance and restoration tasks.
+      </p>
+    </article>
+
+  </div>
+
+</div>
+```
+
+  </section>
+
+  <!-- CHIPSET SUPPORT -->
+
+  <section id="support">
+    <div class="container">
+
+```
+  <div class="section-head">
+    <small>PLATFORM COVERAGE</small>
+    <h2>Multi-chipset servicing environment</h2>
+  </div>
+
+  <div class="chipsets">
+
+    <div class="chip">
+      <h3>⚙️ MediaTek / MTK</h3>
+      <p>
+        BFT descriptions include servicing workflows for supported
+        MediaTek-powered Android devices.
+      </p>
     </div>
 
-    <p style="text-align:center;font-size:12px;color:var(--color-neutral-400);margin:20px 0 0;">&copy; <span id="year"></span> Download Center &middot; <span class="dc-green">Ready</span></p>
-  </main>
+    <div class="chip">
+      <h3>⚡ Qualcomm</h3>
+      <p>
+        Selected Qualcomm devices may use supported diagnostic,
+        firmware and maintenance workflows.
+      </p>
+    </div>
+
+    <div class="chip">
+      <h3>🔩 Unisoc / SPD</h3>
+      <p>
+        Compatibility listings also commonly reference supported
+        Unisoc and Spreadtrum-based smartphones.
+      </p>
+    </div>
+
+  </div>
+
+  <br><br>
+
+  <div class="brands">
+    <span class="brand">Samsung</span>
+    <span class="brand">Xiaomi</span>
+    <span class="brand">Redmi</span>
+    <span class="brand">POCO</span>
+    <span class="brand">OPPO</span>
+    <span class="brand">Vivo</span>
+    <span class="brand">Realme</span>
+    <span class="brand">Tecno</span>
+    <span class="brand">Infinix</span>
+    <span class="brand">Motorola</span>
+    <span class="brand">Huawei</span>
+  </div>
+
 </div>
+```
 
-<script>
-  // ══════════════════════════════════════════════════════════
-  // SETTINGS — edit these values to configure the page
-  // ══════════════════════════════════════════════════════════
-  var SETTINGS = {
-    siteName: "Download Center",
+  </section>
 
-    // Where "Download Link" should go. Leave as a real URL for a direct link.
-    downloadUrl: "https://example.com/your-file.zip",
+  <!-- DOWNLOAD CTA 2 -->
 
-    // Open the download in a new tab (true) or redirect the current tab (false)
-    openInNewTab: true,
+  <section id="get">
+    <div class="container">
 
-    // Set to true to run customJs INSTEAD of following downloadUrl
-    // (e.g. for ad-gate scripts, tracking pixels, custom redirect logic)
-    useCustomJs: false,
+```
+  <div class="download-box">
 
-    // Runs on click when useCustomJs is true. "this" = the button element.
-    customJs: function () {
-      // Example: track the click, then redirect yourself.
-      // console.log("download clicked");
-      // window.location.href = "https://example.com/your-file.zip";
-    }
-  };
-  // ══════════════════════════════════════════════════════════
+    <h2>🪟 Set Up BFT Tool on Windows</h2>
 
-  document.getElementById('year').textContent = new Date().getFullYear();
-  document.getElementById('download-btn').addEventListener('click', function (e) {
-    e.preventDefault();
-    if (SETTINGS.useCustomJs) {
-      try { SETTINGS.customJs.call(this); } catch (err) { console.error(err); }
-      return;
-    }
-    if (!SETTINGS.downloadUrl) return;
-    if (SETTINGS.openInNewTab) window.open(SETTINGS.downloadUrl, '_blank', 'noopener');
-    else window.location.href = SETTINGS.downloadUrl;
-  });
-</script>
+    <p>
+      Prepare your Windows workstation, install the appropriate
+      device drivers and confirm compatibility with the exact Android
+      model before beginning a servicing operation.
+    </p>
+
+    <a class="windows-btn"
+       href="https://linktr.ee/Download__Link"
+       target="_blank"
+       rel="noopener noreferrer">
+      🪟 DOWNLOAD BFT TOOL FOR WINDOWS
+    </a>
+
+    <div class="safe-note">
+      Use servicing functions only on devices you own or have
+      authorization to repair. Back up important data first.
+    </div>
+
+  </div>
+
+</div>
+```
+
+  </section>
+
+  <!-- INSTALLATION -->
+
+  <section id="install">
+    <div class="container">
+
+```
+  <div class="section-head">
+    <small>GETTING STARTED</small>
+    <h2>Prepare your servicing workstation</h2>
+    <p>
+      A careful setup helps reduce driver, connection and
+      compatibility problems.
+    </p>
+  </div>
+
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-number">01</div>
+      <div>
+        <h3>Check Compatibility</h3>
+        <p>
+          Identify the exact phone model, chipset, Android version
+          and firmware before starting.
+        </p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">02</div>
+      <div>
+        <h3>Prepare Windows</h3>
+        <p>
+          Use a compatible Windows computer with sufficient storage,
+          a reliable USB port and appropriate device drivers.
+        </p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">03</div>
+      <div>
+        <h3>Back Up Important Data</h3>
+        <p>
+          Firmware, reset and maintenance operations can affect
+          stored data. Create backups whenever possible.
+        </p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">04</div>
+      <div>
+        <h3>Connect the Device</h3>
+        <p>
+          Use a reliable USB cable and the appropriate supported
+          connection mode for the device.
+        </p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">05</div>
+      <div>
+        <h3>Select the Correct Operation</h3>
+        <p>
+          Confirm the device and firmware details before performing
+          any servicing or software-maintenance procedure.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+```
+
+  </section>
+
+  <!-- FAQ -->
+
+  <section id="faq">
+    <div class="container">
+
+```
+  <div class="section-head">
+    <small>QUESTIONS & ANSWERS</small>
+    <h2>BFT Tool FAQ</h2>
+  </div>
+
+  <details>
+    <summary>What is BFT Tool?</summary>
+    <p>
+      BFT Tool is commonly described as a Windows-based Android
+      servicing utility used for supported firmware, diagnostics,
+      reset and software-maintenance workflows.
+    </p>
+  </details>
+
+  <details>
+    <summary>Does BFT Tool run on Windows?</summary>
+    <p>
+      Current public descriptions identify BFT Tool primarily as a
+      Windows desktop utility.
+    </p>
+  </details>
+
+  <details>
+    <summary>Which chipsets are associated with BFT Tool?</summary>
+    <p>
+      MediaTek, Qualcomm and Unisoc/SPD are among the chipset
+      platforms commonly listed for the tool. Exact compatibility
+      depends on the device and software release.
+    </p>
+  </details>
+
+  <details>
+    <summary>Does every feature work with every Android phone?</summary>
+    <p>
+      No. Available functions can vary according to phone model,
+      chipset, Android version, firmware, security level and the
+      version of the servicing utility.
+    </p>
+  </details>
+
+  <details>
+    <summary>Should I back up the phone first?</summary>
+    <p>
+      Yes. Some firmware and reset operations can erase data or
+      change device configuration, so backups are strongly
+      recommended whenever possible.
+    </p>
+  </details>
+
+  <details>
+    <summary>Who should use BFT Tool?</summary>
+    <p>
+      It is primarily aimed at technicians and experienced users
+      performing legitimate maintenance on devices they own or are
+      authorized to service.
+    </p>
+  </details>
+
+</div>
+```
+
+  </section>
+
+  <!-- FINAL CTA / BUTTON 3 -->
+
+  <section class="final">
+    <div class="container">
+
+```
+  <h2>🔧 Ready for your BFT workspace?</h2>
+
+  <p>
+    Keep your Android servicing setup organized and always verify
+    device compatibility before performing firmware or maintenance
+    operations.
+  </p>
+
+  <a class="final-btn"
+     href="https://linktr.ee/Download__Link"
+     target="_blank"
+     rel="noopener noreferrer">
+    ↓ Download BFT Tool & Begin Setup
+  </a>
+
+</div>
+```
+
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+
+```
+<p>
+  <strong>BFT Tool</strong> • Android Servicing & Firmware Utility
+</p>
+
+<p style="margin-top:8px;">
+  This independent information page is not an official manufacturer
+  website. Product names belong to their respective owners.
+  Use device-servicing functions only with proper authorization.
+</p>
+```
+
+  </div>
+</footer>
+
 </body>
 </html>
